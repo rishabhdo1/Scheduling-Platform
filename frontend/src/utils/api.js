@@ -1,5 +1,5 @@
 
-const BASE = import.meta.env.VITE_API_URL + '/api';
+const BASE = 'https://scheduling-platform-wbvt.onrender.com/api';
 console.log("Connecting to API at:", BASE);
 
 function getHeaders(extra = {}) {
