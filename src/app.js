@@ -10,7 +10,7 @@ const app = express();
 // ── Global middleware ─────────────────────────────────────────
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.CLIENT_URL
+  'https://scheduling-platform-xi.vercel.app/'
 ];
 
 app.use(cors({
