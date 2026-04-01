@@ -11,7 +11,6 @@ function getHeaders(extra = {}) {
 }
 
 async function request(method, path, body) {
-  // This will now fetch from: https://scheduling-platform-wbvt.onrender.com/api/auth/login
   const res = await fetch(`${BASE}${path}`, {
     method,
     headers: getHeaders(),

@@ -3,32 +3,36 @@ const cors         = require('cors');
 const routes       = require('./routes');
 const notFound     = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
-const { clientUrl } = require('./config/env');
 
 const app = express();
 
 // ── Global middleware ─────────────────────────────────────────
+
+// Allowed origins — reads CLIENT_URL from environment variable set on Render
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://scheduling-platform-xi.vercel.app/'
-];
+  process.env.CLIENT_URL,
+].filter(Boolean); // removes undefined if CLIENT_URL is not set
+
+console.log('✅ Allowed CORS origins:', allowedOrigins);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, or Postman)
+    // Allow requests with no origin (Postman, curl, mobile apps)
     if (!origin) return callback(null, true);
-    
+
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(`❌ CORS blocked: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-app.options('*', cors());
+
 app.use(express.json());
 
 // ── Health check ─────────────────────────────────────────────
